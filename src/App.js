@@ -11,6 +11,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXmark,faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { ToastComponent } from './Components/Toast'
 import { findIndex,formatLocalDate,formatInternationalDateWithOffset } from './helper'
+import './App.css';
+import cloud_logo from './Asset/cloud.png';
+import sun_logo from './Asset/sun.png';
 
 class App extends React.Component {
   constructor(props) {
@@ -28,6 +31,7 @@ class App extends React.Component {
     this.international_datetime = ''
     this.local_datetime = ''
     this.toast_msg = ''
+    this.weather_logo = ''
     this.weather_history_data = []
 
     this.Preset_weather_local_storage()
@@ -43,6 +47,8 @@ class App extends React.Component {
       this.weather_history_data = []
       localStorage.setItem('weather_history_data', JSON.stringify(this.weather_history_data))
     }
+
+    this.search_weather('Singapore,SG')
   }
 
   reset_API_RESPONSE(){
@@ -51,7 +57,11 @@ class App extends React.Component {
   }
 
   clear_textInput_textInput_City_Country() {
-    this.textInput_City_Country.current.value = "";
+    try{
+      this.textInput_City_Country.current.value = "";
+    }catch (error){
+      
+    }
   }
 
   store_data_into_local_storage(){
@@ -93,6 +103,7 @@ class App extends React.Component {
   }
 
   async search_weather(data) {
+    console.log(data)
     var city_country = data
     city_country = city_country.split(',')
 
@@ -116,12 +127,21 @@ class App extends React.Component {
       this.setState({ data: data });
 
       await this.get_datetime(data.timezone)
+      this.set_log(data)
       this.store_data_into_local_storage()
 
     }catch(error){
       const ERR_MESSAGE = error.message
 
       this.trigger_toast(ERR_MESSAGE)
+    }
+  }
+
+  set_log(data){
+    if(data.weather[0].main == 'Clouds'){
+      this.weather_logo = cloud_logo
+    }else{
+      this.weather_logo = sun_logo
     }
   }
 
@@ -152,56 +172,65 @@ class App extends React.Component {
     const myData = this.weather_history_data
     const { toast_boolean } = this.toast_boolean_state
     const toast_msg = this.toast_msg
+    const weather_logo = this.weather_logo
 
     return (
-      <div>
+      <div className="background" style={{  height: '100vh'}}>
         <ToastComponent content={toast_msg} delay={5000} trigger={toast_boolean} />
-        
-        <div style={{ marginBottom: '10px', width: "100vw", textAlign: "center" }}>
-          <Card style={{width:'50vw',margin: "auto"}}>
-              <Card.Header>Weather</Card.Header>
-              <Card.Body>
-                {data && (
-                  <div>
-                    <h2>{data.name}, {data.sys.country}</h2>
-                    <h2>{data.weather[0].main}</h2>
-                    <p>Description: {data.weather[0].description}</p>
-                    <p>Temperature: {data.main.temp_min} &deg;C ~ {data.main.temp_max} &deg;C</p>
-                    <p>Humidity: {data.main.humidity}%</p>
-                    <p>International Time: {international_datetime}</p>
-                    <p>Local Time: {local_datetime}</p>
-                  </div>
-                )}
-              </Card.Body>
-            </Card>             
-        </div>
 
-        <div style={{ marginBottom: '10px', width: "100vw", textAlign: "center" }}>
-          <Card style={{width:'50vw',margin: "auto"}}>
-            <Card.Header>Seach History</Card.Header>
-            <Card.Body>
-
-              <InputGroup className="mb-3">
-                <Form.Control 
-                  ref={this.textInput_City_Country}
-                  placeholder="Town,Country"
-                  aria-label="Town,Country"
-                  aria-describedby="basic-addon2"
-                />
-                <Button variant="danger" style={{ border: '1px solid #ced4da', color: 'black', backgroundColor: 'transparent' }} onClick={() => this.clear_textInput_textInput_City_Country()}><FontAwesomeIcon icon={faXmark} /></Button>
-                <Button variant="primary" onClick={() => this.search()}><FontAwesomeIcon icon={faMagnifyingGlass} /></Button>
-              </InputGroup>
-            </Card.Body>
-          </Card>        
+        <div style={{ marginBottom: '10px', width: "100vw", textAlign: "center",marginBottom:'100px',paddingTop:'20px' }}>
+          <input type='text' className='textInputCS'
+                    ref={this.textInput_City_Country}
+                    placeholder="Town,Country"
+                    aria-label="Town,Country"
+                    aria-describedby="basic-addon2"
+                  />
+          <button className='searchButton' variant="primary" onClick={() => this.search()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>   
         </div>
         
         <div style={{ marginBottom: '10px',width: "100vw", textAlign: "center" }}>
-          <Card style={{ width: "50vw", margin: "auto" }}>
-            <Card.Header>Seach History</Card.Header>
-            <Card.Body>
-              <TableComponent style={{width:'100%'}} data={myData} onButtonClick={this.handleButtonClick} />
-            </Card.Body>
-          </Card>
+          <div className='tableCard' style={{ width: "51%", margin: "auto" }}>
+              {data && (
+                  <div style={{ marginLeft:'40px',width: "100%", textAlign: "left" }}>
+                    <div className='row'>
+                      <div className='col-md-6'>
+                        <p className='todayWeatherText'>Today's Weather</p>
+                        <p className='mainTempText'>{(data.main.temp - 273.15).toFixed(0)} &deg;</p>
+                        <p className='minmaxTempText'>H: {(data.main.temp_min - 273.15).toFixed(0)} &deg; L: {(data.main.temp_max - 273.15).toFixed(0)} &deg;</p>
+                      </div>
+
+                      <div className='col-md-6' style={{marginTop : '-140px'}}>
+                        <div className="image-div">
+                          <img src={weather_logo} style={{ width: "100%", margin: "auto" }} alt="Logo" />
+                        </div>
+                      </div>
+
+                      <div className="row">
+                        <div className='col-md-3'>
+                        <p className='otherWeatherContentText'>{data.name}, {data.sys.country}</p>
+                        </div>
+                        <div className='col-md-3'>
+                        <p className='otherWeatherContentText'>{international_datetime}</p>
+                        </div>
+                        <div className='col-md-3'>
+                        <p className='otherWeatherContentText'>Humidity: {data.main.humidity}%</p>
+                        </div>
+                        <div className='col-md-3'>
+                        <p className='otherWeatherContentText'>{data.weather[0].main}</p>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </div>
+                )}
+
+              <div className='tableCardInner' style={{ width: "90%", margin: "auto" }}>
+                <div style={{textAlign: "left",marginLeft:'20px' }}><h6>Search History</h6></div>
+                <TableComponent style={{width:'100%'}} data={myData} onButtonClick={this.handleButtonClick} />
+              </div>
+          </div>
         </div>
 
       </div>

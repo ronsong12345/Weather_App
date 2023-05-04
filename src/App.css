@@ -36,3 +36,85 @@
     transform: rotate(360deg);
   }
 }
+
+.background {
+  background-image: url('./Asset/bg-light.png');
+}
+
+.image-div{
+  width: 300px;
+  height: 300px;
+}
+
+.textInputCS{
+  width: 620px;
+  height: 60px;
+
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
+
+.searchButton{
+  width: 60px;
+  height: 60px;
+  margin: 10px;
+  background: #6C40B5;
+  border-radius: 20px;
+  color: white;
+}
+
+
+.tableCard{
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+
+  border-radius: 40px;
+}
+
+.tableCardInner{
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+}
+
+.todayWeatherText{
+  padding-top: 30px;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+  margin: 0;
+
+  color: #000000;
+}
+
+.mainTempText{
+  margin: 0;
+  color: #6C40B5;
+  font-weight: 1000;
+  font-size: 50px;
+}
+
+.minmaxTempText{
+  margin: 0;
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #000000;
+}
+
+.otherWeatherContentText{
+  font-family: 'Noto Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 22px;
+
+  color: #666666;
+}
