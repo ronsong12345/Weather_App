@@ -7,12 +7,15 @@ import Button from 'react-bootstrap/Button';
 import './Table.css';
 
 function TableComponent({ data,onButtonClick  }) {
+  //state for table data
   const [tableData, setTableData] = useState(data);
 
+  //update table data
   useEffect(() => {
     setTableData(data);
   }, [data]);
 
+  //trigger when delete button is clicked, to remove a record and update local storage
   const handleDelete = (index) => {
     const newData = [...tableData];
     newData.splice(index, 1);
@@ -20,6 +23,7 @@ function TableComponent({ data,onButtonClick  }) {
     localStorage.setItem('weather_history_data', JSON.stringify(newData))
   };
 
+  //trigger when search button is clicked, to send value back to parent for search_weather
   const handleButtonClick = (City_Country) => {
     onButtonClick(City_Country);
   };

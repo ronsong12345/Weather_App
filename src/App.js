@@ -18,25 +18,31 @@ import sun_logo from './Asset/sun.png';
 class App extends React.Component {
   constructor(props) {
     super(props);
+    // create ref for input to get value of CityCountry
     this.textInput_City_Country = React.createRef();
     
+    //set init state
     this.API_state = {
       data: null
     };
 
+    //set init state
     this.toast_boolean_state = {
       toast_boolean : false
     };
 
+    //init variable
     this.international_datetime = ''
     this.local_datetime = ''
     this.toast_msg = ''
     this.weather_logo = ''
     this.weather_history_data = []
 
+    //call to obtain the preset weather
     this.Preset_weather_local_storage()
   }
 
+  //trigger search_weather api with preset city and country and add it to localstorage.
   Preset_weather_local_storage(){
     var weather_history_data = localStorage.getItem('weather_history_data');
     var weather_history_data_list = JSON.parse(weather_history_data)
@@ -51,11 +57,13 @@ class App extends React.Component {
     this.search_weather('Singapore,SG')
   }
 
+  //trigger reset weather data and clear textinput
   reset_API_RESPONSE(){
     this.API_state.data = null
     this.clear_textInput_textInput_City_Country()
   }
 
+  //trigger clear textinput
   clear_textInput_textInput_City_Country() {
     try{
       this.textInput_City_Country.current.value = "";
@@ -64,7 +72,9 @@ class App extends React.Component {
     }
   }
 
+  //trigger store data into local storage
   store_data_into_local_storage(){
+    //get history data from local storage
     var weather_history_data = localStorage.getItem('weather_history_data');
     var weather_history_data_list = JSON.parse(weather_history_data)
     var weather_data_json = {
@@ -75,6 +85,7 @@ class App extends React.Component {
       international_datetime:this.international_datetime
     }
 
+    //there is same city country found, update the record, else add a new record
     if(weather_history_data_list.length > 0){
       const index = findIndex(weather_history_data_list, 'City_Country', weather_data_json.City_Country);
       console.log(index)
@@ -92,16 +103,19 @@ class App extends React.Component {
       localStorage.setItem('weather_history_data', JSON.stringify(weather_data_json))
     }
 
+    //get latest data from localstorage for table update.
     var weather_history_data = localStorage.getItem('weather_history_data');
     var weather_history_data_list = JSON.parse(weather_history_data)
     this.weather_history_data = weather_history_data_list
   }
 
+  //trigger when search button next to textInput is clicked
   search(){
     var city_country = this.textInput_City_Country.current.value
     this.search_weather(city_country)
   }
 
+  //trigger search_weather and display error or result
   async search_weather(data) {
     console.log(data)
     var city_country = data
@@ -127,7 +141,7 @@ class App extends React.Component {
       this.setState({ data: data });
 
       await this.get_datetime(data.timezone)
-      this.set_log(data)
+      this.set_logo(data)
       this.store_data_into_local_storage()
 
     }catch(error){
@@ -137,7 +151,8 @@ class App extends React.Component {
     }
   }
 
-  set_log(data){
+  //trigger set logo based on data provided by API
+  set_logo(data){
     if(data.weather[0].main == 'Clouds'){
       this.weather_logo = cloud_logo
     }else{
@@ -145,6 +160,7 @@ class App extends React.Component {
     }
   }
 
+  //trigger toast when error
   trigger_toast(message){
     this.toast_boolean_state.toast_boolean = true
     this.setState({ toast_boolean: true });
@@ -156,11 +172,13 @@ class App extends React.Component {
     }, 5000);
   }
 
+  //get local datetime and international datetime from helper
   get_datetime(timezoneOffset){
     this.international_datetime = formatInternationalDateWithOffset(timezoneOffset)
     this.local_datetime = formatLocalDate()
   }
 
+  //trigger when child table component search button is clicked, to call search_weather
   handleButtonClick = (value) => {
     this.search_weather(value)
   };

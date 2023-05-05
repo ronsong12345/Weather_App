@@ -1,4 +1,4 @@
-
+//general findindex method with parameter array, object key property, and valeu to search
 export function findIndex(array, property, value) {
     for (let i = 0; i < array.length; i++) {
       if (array[i][property] === value) {
@@ -8,6 +8,7 @@ export function findIndex(array, property, value) {
     return -1;
   }
 
+//to get the current datetime and format it
 export function formatLocalDate(){
     const date = new Date();
     const formattedDateString = date.toLocaleString('en-US', {
@@ -21,6 +22,7 @@ export function formatLocalDate(){
     return formattedDateString
   }
 
+//to get the current datetime and convert it to international time with timzezone offset provided by API and format it
 export function formatInternationalDateWithOffset(timezoneOffset) {
     const date = new Date();
     const localTime = date.getTime();
