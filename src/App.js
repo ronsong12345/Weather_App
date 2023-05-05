@@ -175,59 +175,62 @@ class App extends React.Component {
     const weather_logo = this.weather_logo
 
     return (
-      <div className="background" style={{  height: '100vh'}}>
+      <div className="background">
         <ToastComponent content={toast_msg} delay={5000} trigger={toast_boolean} />
 
-        <div style={{ marginBottom: '10px', width: "100vw", textAlign: "center",marginBottom:'100px',paddingTop:'20px' }}>
-          <input type='text' className='textInputCS'
-                    ref={this.textInput_City_Country}
-                    placeholder="Town,Country"
-                    aria-label="Town,Country"
-                    aria-describedby="basic-addon2"
-                  />
-          <button className='searchButton' variant="primary" onClick={() => this.search()}><FontAwesomeIcon icon={faMagnifyingGlass} /></button>   
+        <div className='search_inputfield_button_div'>
+          <div className='row' style={{width:'100%'}}>
+            <div className='col-3'></div>
+            <div className='col-5'>
+              <Form.Control className='textInputCS'
+                  type="text"
+                  ref={this.textInput_City_Country}
+                    placeholder="City,Country"
+                    aria-label="City,Country"
+                />
+            </div>
+            <div className='col-1'><Button className='search_button' variant="Dark" onClick={() => this.search()}><FontAwesomeIcon icon={faMagnifyingGlass} /></Button></div>
+          </div>
         </div>
         
-        <div style={{ marginBottom: '10px',width: "100vw", textAlign: "center" }}>
-          <div className='tableCard' style={{ width: "51%", margin: "auto" }}>
+        <div className='weather_content_div'>
+          <div className='tableCard'>
               {data && (
-                  <div style={{ marginLeft:'40px',width: "100%", textAlign: "left" }}>
+                  <div className='table_content'>
                     <div className='row'>
-                      <div className='col-md-6'>
+                      <div className='col-6'>
                         <p className='todayWeatherText'>Today's Weather</p>
                         <p className='mainTempText'>{(data.main.temp - 273.15).toFixed(0)} &deg;</p>
                         <p className='minmaxTempText'>H: {(data.main.temp_min - 273.15).toFixed(0)} &deg; L: {(data.main.temp_max - 273.15).toFixed(0)} &deg;</p>
                       </div>
 
-                      <div className='col-md-6' style={{marginTop : '-140px'}}>
+                      <div className='col-6 weather_logo_div'>
                         <div className="image-div">
                           <img src={weather_logo} style={{ width: "100%", margin: "auto" }} alt="Logo" />
                         </div>
                       </div>
 
                       <div className="row">
-                        <div className='col-md-3'>
-                        <p className='otherWeatherContentText'>{data.name}, {data.sys.country}</p>
+                        <div className='col-3'>
+                         <p className='otherWeatherContentText'>{data.name}, {data.sys.country}</p>
                         </div>
-                        <div className='col-md-3'>
-                        <p className='otherWeatherContentText'>{international_datetime}</p>
+                        <div className='col-3'>
+                          <p className='otherWeatherContentText'>{international_datetime}</p>
                         </div>
-                        <div className='col-md-3'>
-                        <p className='otherWeatherContentText'>Humidity: {data.main.humidity}%</p>
+                        <div className='col-3'>
+                          <p className='otherWeatherContentText'>Humidity: {data.main.humidity}%</p>
                         </div>
-                        <div className='col-md-3'>
-                        <p className='otherWeatherContentText'>{data.weather[0].main}</p>
+                        <div className='col-3'>
+                          <p className='otherWeatherContentText'>{data.weather[0].main}</p>
                         </div>
                       </div>
+
                     </div>
-
-
-
                   </div>
                 )}
 
-              <div className='tableCardInner' style={{ width: "90%", margin: "auto" }}>
-                <div style={{textAlign: "left",marginLeft:'20px' }}><h6>Search History</h6></div>
+              <div className='tableCardInner'>
+                <div><h6 className='searchHistoryText'>Search History</h6></div>
                 <TableComponent style={{width:'100%'}} data={myData} onButtonClick={this.handleButtonClick} />
               </div>
           </div>

@@ -1,0 +1,17 @@
+.search_button_in_table{
+    border-radius: 50px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    color: gray;
+}
+
+.delete_button_in_table{
+    border-radius: 50px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    color: gray;
+}
+
+.weather_history_table{
+    border: transparent;
+}
